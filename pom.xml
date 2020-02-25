@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.example</groupId>
+	<artifactId>tmac-demo</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>tmac-demo2</name>
+	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.0.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<!--sonar 的地址 -->
+		<!--<sonar.report.export.path>/report/sonar-report.json</sonar.report.export.path>-->
+		<!--源代码路径 -->
+		<sonar.sources>src/main</sonar.sources>
+		<!--测试代码路径 -->
+		<sonar.tests>src/test</sonar.tests>
+		<!-- 生成结果方式-->
+		<sonar.issuesReport.html.enable>true</sonar.issuesReport.html.enable>
+		<sonar.issuesReport.json.enable>true</sonar.issuesReport.json.enable>
+		<!-- 分析插件-->
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<!-- 报表组件路径-->
+		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
+		<!-- 报表组件数据文件路径-->
+		<jacoco.dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.dataFile>
+		<sonar.language>java</sonar.language>
+		<!-- sonar 扫描使用的验证token ，重要-->
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<sonar.login>${SONAR_TOKEN}</sonar.login>
+        <sonar.password></sonar.password>
+	    <sonar.host.url>${SONAR_URL}</sonar.host.url>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-security -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-security</artifactId>
+			<version>2.0.0.RELEASE</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<!--<plugins>-->
+		<!--<plugin>-->
+		<!--<groupId>org.springframework.boot</groupId>-->
+		<!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+		<!--</plugin>-->
+		<!--</plugins>-->
+		<plugins>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.3.0.603</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
+				<configuration>
+					<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+					<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+					<skip>false</skip>
+					<output>file</output>
+					<append>true</append>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<propertyName>surefireArgLine</propertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+    <repositories>
+	<repository>
+	    <id>tmac</id>
+	    <name>tmac</name>
+	    <url>${env.NEXUS_MAVEN_REPO}</url>
+	    <snapshots>
+		<enabled>true</enabled>
+	    </snapshots>
+	    <releases>
+		<enabled>true</enabled>
+	    </releases>
+	</repository>
+    </repositories>
+</project>
